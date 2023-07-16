@@ -7,7 +7,7 @@
  *
  * Return: pointer
  */
-/*
+
 char *allocator(size_t n)
 {
 	size_t i;

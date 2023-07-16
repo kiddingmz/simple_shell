@@ -17,7 +17,7 @@ int main(int ac, char **av, char **env)
 	char *buffer = NULL;
 	char *sub_command = NULL;
 	char **data = NULL;
-	/*
+
 	if (isatty(fileno(stdin)))
 	{
 		if (ac == 1)
@@ -48,6 +48,6 @@ int main(int ac, char **av, char **env)
 			sub_command = NULL;
 			data = NULL;
 		}
-	}*/
+	}
 	return (0);
 }

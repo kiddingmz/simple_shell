@@ -8,7 +8,7 @@
  * Return: string
  *
  */
-/*
+
 char *_cpy_arg(char **data)
 {
 	size_t i, size, j;

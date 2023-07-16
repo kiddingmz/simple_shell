@@ -69,7 +69,7 @@ char *_realloc(char *src, size_t size)
  *
  * Return: ssize_t
  */
-/*
+
 ssize_t _getline(char **line_pointer, size_t *n, FILE *stream)
 {
 	ssize_t bytes_read, buffer_size, read_bytes = 0;

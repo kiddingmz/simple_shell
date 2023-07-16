@@ -123,7 +123,7 @@ ssize_t _getline(char **line_pointer, size_t *n, FILE *stream)
  *
  * Return: matrix
  */
-/*
+
 char **process_args(char *data)
 {
 	char *tmp = NULL;

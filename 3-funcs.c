@@ -144,7 +144,7 @@ char *_strcat_space(char *dest, char *src)
  *
  * Return: string
  */
-/*
+
 char *_strcpy(char *dest, const char *src)
 {
 	size_t i;

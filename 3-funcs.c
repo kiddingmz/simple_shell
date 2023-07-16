@@ -7,7 +7,7 @@
  *
  * Return: string
  */
-/*
+
 char *_strdup(char *str)
 {
 	size_t len, i;

@@ -102,7 +102,7 @@ char *_get_location(char *name)
  *
  * Return: unsigned int
  */
-/*
+
 size_t _strlen(const char *str)
 {
 	size_t i;

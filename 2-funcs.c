@@ -7,7 +7,7 @@
  *
  * Return: int
  */
-/*
+
 int check_path(char *path)
 {
 	struct stat buffer;

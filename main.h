@@ -33,8 +33,8 @@ char *_strdup(char *);
 char *_strtok(char *, const char *);
 char *_strcat(char *, char *);
 char *_strcat_space(char *, char *);
-/*char *_strcpy(char *, const char *);*/
-/*char *_strncpy(char *, const char *, size_t);*/
+char *_strcpy(char *, const char *);
+char *_strncpy(char *, const char *, size_t);
 /*char *allocator(size_t);
 char *_realloc(char *, size_t);
 ssize_t _getline(char **, size_t *, FILE *);

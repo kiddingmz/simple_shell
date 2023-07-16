@@ -24,7 +24,7 @@ int check_path(char *path)
  *
  * Return: nothing
  */
-/*
+
 void _free_array(char **av)
 {
 	size_t i;

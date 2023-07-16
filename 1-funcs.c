@@ -25,7 +25,7 @@ int _strcmp(const char *dest, const char *src)
 	if (dest[i] == '\0' && src[i] == '\0')
 		return (0);
 	return (1);
-}*/
+}
 
 /**
  * _getenv - get path
@@ -34,7 +34,7 @@ int _strcmp(const char *dest, const char *src)
  *
  * Return: string
  */
-/*
+
 char *_getenv(char *name)
 {
 	char *sub_path = NULL;
@@ -57,7 +57,7 @@ char *_getenv(char *name)
 	}
 	return (NULL);
 }
-*/
+
 /**
  * _get_location - get location
  *

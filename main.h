@@ -18,8 +18,8 @@ extern char **environ;
 char *_get_location(char *);
 char *_getenv(char *);
 size_t _strlen(const char *);
-/*char *_strcat_path(char *, char *);*/
-/*void _strcat_path(const char *, const char *, char *);*/
+char *_strcat_path(char *, char *);
+void _strcat_path(const char *, const char *, char *);
 /*int check_path(char *);*/
 /*void non_interactive(int, char **, char **);*/
 /*void interactive(int, char **, char **);*/

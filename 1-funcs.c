@@ -122,7 +122,7 @@ size_t _strlen(const char *str)
  *
  * Return: nothing
  */
-/*
+
 void _strcat_path(const char *dest, const char *src, char *buffer)
 {
 	size_t d = _strlen(dest);

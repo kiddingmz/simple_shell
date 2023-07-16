@@ -17,7 +17,7 @@ void interactive(int ac, char **av, char **env)
 	char *command = NULL;
 	char *sub_command = NULL;
 	char **data = NULL;
-	/*
+	
 	while (1)
 	{
 		_putstring("$ ");
@@ -50,7 +50,7 @@ void interactive(int ac, char **av, char **env)
 				free(sub_command);
 			}
 		}
-	}*/
+	}
 }
 
 /**

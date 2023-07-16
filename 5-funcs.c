@@ -106,7 +106,7 @@ char *_memcpy(char *dest, const char *src, size_t n)
  * Return: string
  *
  */
-/*
+
 char *_memmove(char *dest, const char *src, size_t n)
 {
 	if ((src == NULL) || (dest == NULL))

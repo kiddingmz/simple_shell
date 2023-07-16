@@ -26,9 +26,9 @@ void interactive(int, char **, char **);
 int _strcmp(const char *, const char *);
 void _exe(int, char **, char *, char *, char **);
 void _free_array(char **);
-/*int _putchar(char);*/
-/*int _putstring(const char *);*/
-/*void _putenv(char **);*/
+int _putchar(char);
+int _putstring(const char *);
+void _putenv(char **);
 /*char *_strdup(char *);*/
 /*char *_strtok(char *, const char *);*/
 /*char *_strcat(char *, char *);*/

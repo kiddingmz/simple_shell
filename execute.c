@@ -11,7 +11,7 @@
  *
  * Return: nothing
  */
-/*
+
 void _exe(__attribute__((unused)) int ac, char **av, char *c,
 		char *name, char **env)
 {

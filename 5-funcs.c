@@ -43,7 +43,7 @@ char *_cpy_arg(char **data)
  *
  * Return: int
  */
-/*
+
 int _atoi(char *s)
 {
 	int i, d, n, len, f, digit;
@@ -86,7 +86,7 @@ int _atoi(char *s)
  * Return: string
  *
  */
-/*
+
 char *_memcpy(char *dest, const char *src, size_t n)
 {
 	size_t i;

@@ -134,7 +134,7 @@ char *_memmove(char *dest, const char *src, size_t n)
  * Return: int
  *
  */
-/*
+
 int _isspace(int c)
 {
 	if (c == ' ' || c == '\t' || c == '\n' || c == '\r' ||

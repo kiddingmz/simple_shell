@@ -37,7 +37,7 @@ char *_strdup(char *str)
  *
  * Return: string
  */
-/*
+
 char *_strtok(char *str, const char *delim)
 {
 	static char *token;

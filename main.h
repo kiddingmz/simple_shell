@@ -40,9 +40,9 @@ char *_realloc(char *, size_t);
 ssize_t _getline(char **, size_t *, FILE *);
 char **process_args(char *);
 char *_cpy_arg(char **);
-/*int _atoi(char *);
+int _atoi(char *);
 int _isspace(int);
 char *_strtrim(char *);
-char *_memmove(char *, const char *, size_t);
+/*char *_memmove(char *, const char *, size_t);
 char *_memcpy(char *, const char *, size_t);*/
 #endif

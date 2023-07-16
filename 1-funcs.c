@@ -65,7 +65,7 @@ char *_getenv(char *name)
  *
  * Return: string
  */
-/*
+
 char *_get_location(char *name)
 {
 	char *path = _getenv("PATH");
@@ -94,7 +94,6 @@ char *_get_location(char *name)
 	free(p_path);
 	return (NULL);
 }
-*/
 
 /**
  * _strlen -length of string

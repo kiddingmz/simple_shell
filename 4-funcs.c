@@ -32,7 +32,7 @@ char *allocator(size_t n)
  *
  * Return: string
  */
-/*
+
 char *_realloc(char *src, size_t size)
 {
 	char *dest;

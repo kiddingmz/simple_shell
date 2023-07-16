@@ -8,7 +8,7 @@
  * Return: string
  *
  */
-/*
+
 char *_strtrim(char *str)
 {
 	size_t len = _strlen(str);

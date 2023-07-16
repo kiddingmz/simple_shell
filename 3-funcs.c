@@ -87,7 +87,7 @@ char *_strtok(char *str, const char *delim)
  *
  * Return: string
  */
-/*
+
 char *_strcat(char *dest, char *src)
 {
 	size_t i, n, d;

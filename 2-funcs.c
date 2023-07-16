@@ -55,7 +55,7 @@ int _putchar(char c)
  *
  * Return: lenght
  */
-/*
+
 int _putstring(const char *str)
 {
 	unsigned int i;

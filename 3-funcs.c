@@ -108,7 +108,7 @@ char *_strcat(char *dest, char *src)
  *
  * Return: string
  */
-/*
+
 char *_strcat_space(char *dest, char *src)
 {
 	/*

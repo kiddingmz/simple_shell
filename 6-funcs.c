@@ -43,7 +43,7 @@ char *_strtrim(char *str)
  *
  * Return: string
  */
-/*
+
 char *_strncpy(char *dest, const char *src, size_t n)
 {
 	size_t i;

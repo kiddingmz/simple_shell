@@ -8,7 +8,7 @@
  *
  * Return: int
  */
-/*
+
 int _strcmp(const char *dest, const char *src)
 {
 	size_t i;

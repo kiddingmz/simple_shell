@@ -72,7 +72,7 @@ int _putstring(const char *str)
  *
  * Return: nothing
  */
-/*
+
 void _putenv(char **env)
 {
 	unsigned int i;

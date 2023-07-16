@@ -23,7 +23,7 @@ void _strcat_path(const char *, const char *, char *);
 int check_path(char *);
 void non_interactive(int, char **, char **);
 void interactive(int, char **, char **);
-/*int _strcmp(const char *, const char *);*/
+int _strcmp(const char *, const char *);
 /*void _exe(int, char **, char *, char *, char **);*/
 /*void _free_array(char **);*/
 /*int _putchar(char);*/

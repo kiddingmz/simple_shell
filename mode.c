@@ -62,7 +62,7 @@ void interactive(int ac, char **av, char **env)
  *
  * Return: nothing
  */
-/*
+
 void non_interactive(int ac, char **av, char **env)
 {
 	char **data = NULL;

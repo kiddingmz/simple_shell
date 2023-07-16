@@ -29,10 +29,10 @@ void _free_array(char **);
 int _putchar(char);
 int _putstring(const char *);
 void _putenv(char **);
-/*char *_strdup(char *);*/
-/*char *_strtok(char *, const char *);*/
-/*char *_strcat(char *, char *);*/
-/*char *_strcat_space(char *, char *);*/
+char *_strdup(char *);
+char *_strtok(char *, const char *);
+char *_strcat(char *, char *);
+char *_strcat_space(char *, char *);
 /*char *_strcpy(char *, const char *);*/
 /*char *_strncpy(char *, const char *, size_t);*/
 /*char *allocator(size_t);

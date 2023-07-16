@@ -9,7 +9,7 @@
  *
  * Return: nothing
  */
-/*
+
 void interactive(int ac, char **av, char **env)
 {
 	ssize_t num_buffer;

@@ -95,6 +95,7 @@ char *_get_location(char *name)
 	return (NULL);
 }
 
+
 /**
  * _strlen -length of string
  *

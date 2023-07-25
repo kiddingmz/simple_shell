@@ -86,7 +86,7 @@ ssize_t _getline(char **line_pointer, size_t *n, FILE *stream)
 			return (-1);
 	}
 	else
-	buffer_size = *n;
+		buffer_size = *n;
 	buffer_loc = buffer;
 	while ((bytes_read = read(fileno(stream), buffer_loc, 1)) > 0)
 	{

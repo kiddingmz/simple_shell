@@ -27,7 +27,7 @@ int main(int ac, char **av, char **env)
 	}
 	else
 	{
-		while ((nu = _getline(&buffer, &i, stdin)) != -1)
+		while ((nu = getline(&buffer, &i, stdin)) != -1)
 		{
 			if (buffer[0] != '\n' && buffer[1] != '\0')
 			{

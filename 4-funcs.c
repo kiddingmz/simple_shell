@@ -72,10 +72,9 @@ char *_realloc(char *src, size_t size)
 
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 {
-	static char *buffer;
-	static size_t size;
+	size_t size, i = 0;
 	int c;
-	size_t i = 0;
+	static char *buffer;
 
 	if (lineptr == NULL || n == NULL)
 		return (-1);
@@ -87,10 +86,9 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 		if (buffer == NULL)
 			return (-1);
 	}
-
 	while ((c = read(fileno(stream), buffer + i, 1)) == 1)
 	{
-		if (buffer[i++] == '\n')
+		if (buffer[i] == '\n')
 			break;
 		if (i == size)
 		{
@@ -99,16 +97,15 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 			if (buffer == NULL)
 				return (-1);
 		}
+		i++;
 	}
-
-	if (c == 0)
-		buffer[i] = '\0';
-	else
+	if (c == 0 || c == -1)
 	{
-		buffer[i] = '\n';
-		buffer[i + 1] = '\0';
+		buffer[i] = '\0';
+		return (-1);
 	}
-
+	buffer[i] = '\n';
+	buffer[i + 1] = '\0';
 	*lineptr = buffer;
 	*n = i + 1;
 	return (i + 1);

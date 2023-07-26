@@ -63,57 +63,55 @@ char *_realloc(char *src, size_t size)
 /**
  * _getline - input data
  *
- * @line_pointer: input
+ * @lineptr: input
  * @n: size
  * @stream: stream
  *
  * Return: ssize_t
  */
 
-ssize_t _getline(char **line_pointer, size_t *n, FILE *stream)
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 {
-	ssize_t bytes_read, buffer_size, read_bytes = 0;
 	static char *buffer;
-	char *buffer_loc = NULL;
+	static size_t size;
+	int c;
+	size_t i = 0;
 
-	if (line_pointer == NULL || n == NULL || stream == NULL)
+	if (lineptr == NULL || n == NULL)
 		return (-1);
-	if (buffer == NULL || *n == 0)
+
+	if (buffer == NULL)
 	{
-		buffer_size = 120;
-		buffer = allocator(buffer_size);
+		size = 120;
+		buffer = allocator(size);
 		if (buffer == NULL)
 			return (-1);
 	}
-	else
-		buffer_size = *n;
-	buffer_loc = buffer;
-	while ((bytes_read = read(fileno(stream), buffer_loc, 1)) > 0)
+
+	while ((c = read(fileno(stream), buffer + i, 1)) == 1)
 	{
-		read_bytes++;
-		if (read_bytes >= buffer_size)
+		if (buffer[i++] == '\n')
+			break;
+		if (i == size)
 		{
-			buffer_size *= 2;
-			buffer = _realloc(buffer, buffer_size);
+			size *= 2;
+			buffer = _realloc(buffer, size);
 			if (buffer == NULL)
 				return (-1);
-			buffer_loc = buffer + read_bytes;
 		}
-		if (buffer[read_bytes - 1] == '\n')
-			break;
-		buffer_loc++;
 	}
-	if (bytes_read == -1 || bytes_read == 0)
+
+	if (c == 0)
+		buffer[i] = '\0';
+	else
 	{
-		free(buffer);
-		*line_pointer = NULL;
-		*n = 0;
-		return (-1);
+		buffer[i] = '\n';
+		buffer[i + 1] = '\0';
 	}
-	buffer[read_bytes] = '\0';
-	*line_pointer = buffer;
-	*n = buffer_size;
-	return (read_bytes);
+
+	*lineptr = buffer;
+	*n = i + 1;
+	return (i + 1);
 }
 
 /**

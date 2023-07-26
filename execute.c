@@ -42,8 +42,11 @@ void _exe(__attribute__((unused)) int ac, char **av, char *c,
 		}
 		else
 		{
+			_putstring(name);
+			_putstring(": ");
+			_putstring("1: ");
 			_putstring(c);
-			_putstring(": command not found\n");
+			_putstring(": not found\n");
 		}
 		free(path_file);
 	}

@@ -61,62 +61,6 @@ char *_realloc(char *src, size_t size)
 }
 
 /**
- * _getline - input data
- *
- * @line_pointer: input
- * @n: size
- * @stream: stream
- *
- * Return: ssize_t
- */
-
-ssize_t _getline(char **line_pointer, size_t *n, FILE *stream)
-{
-	ssize_t bytes_read, buffer_size, read_bytes = 0;
-	static char *buffer;
-	char *buffer_loc = NULL;
-
-	if (line_pointer == NULL || n == NULL || stream == NULL)
-		return (-1);
-	if (buffer == NULL || *n == 0)
-	{
-		buffer_size = 120;
-		buffer = allocator(buffer_size);
-		if (buffer == NULL)
-			return (-1);
-	}
-	else
-		buffer_size = *n;
-	buffer_loc = buffer;
-	while ((bytes_read = read(fileno(stream), buffer_loc, 1)) > 0)
-	{
-		read_bytes++;
-		if (read_bytes >= buffer_size)
-		{
-			buffer_size *= 2;
-			buffer = _realloc(buffer, buffer_size);
-			if (buffer == NULL)
-				return (-1);
-			buffer_loc = buffer + read_bytes;
-		}
-		if (buffer[read_bytes - 1] == '\n')
-			break;
-		buffer_loc++;
-	}
-	if (bytes_read == -1 || bytes_read == 0)
-	{
-		free(buffer);
-		*line_pointer = NULL;
-		*n = 0;
-		return (-1);
-	}
-	buffer[read_bytes] = '\0';
-	*line_pointer = buffer;
-	*n = buffer_size;
-	return (read_bytes);
-}
-
-/**
  * process_args - process arguments
  *
  * @data: data

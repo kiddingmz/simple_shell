@@ -63,10 +63,12 @@ void _exe(__attribute__((unused)) int ac, char **av, char *c,
 	{
 		if (!_strcmp(c, "cd"))
 			_cd(av);
-		else if (!_strcmp(c, "setenv") && av[1] != NULL	&& av[2] != NULL)
+		else if (!_strcmp(c, "setenv"))
 			_setenv(av);
-		else if (!_strcmp(c, "unsetenv") && av[1] != NULL)
+		else if (!_strcmp(c, "unsetenv"))
 			_unsetenv(av);
+		else if (!_strcmp(c, "exit"))
+			exit_status(av);
 		else
 		{
 			path_file = _get_location(c);

@@ -59,8 +59,15 @@ int _putchar(char c)
 int _putstring(const char *str)
 {
 	unsigned int i;
+	char *err = "(null)";
 
-	for (i = 0; str[i] != '\0' && str != NULL; i++)
+	if (str == NULL || str == (void *)0)
+	{
+		for (i = 0; err[i] != '\0'; i++)
+			_putchar(err[i]);
+		return (6);
+	}
+	for (i = 0; str[i] != '\0'; i++)
 		_putchar(str[i]);
 	return (i);
 }

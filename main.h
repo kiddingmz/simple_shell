@@ -50,4 +50,6 @@ void _cd(char **);
 int _setenv(char **);
 int _unsetenv(char **);
 void _putserr(const char *, char *, char *);
+void exit_status(char **);
+int _strncmp(const char *, const char *, size_t);
 #endif

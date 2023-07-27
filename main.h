@@ -46,4 +46,8 @@ int _isspace(int);
 char *_strtrim(char *);
 char *_memmove(char *, const char *, size_t);
 char *_memcpy(char *, const char *, size_t);
+void _cd(char **);
+int _setenv(char **);
+int _unsetenv(char **);
+void _putserr(const char *, char *, char *);
 #endif

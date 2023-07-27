@@ -35,27 +35,6 @@ char *_strtrim(char *str)
 }
 
 /**
- * _strncpy - copy a string
- *
- * @dest: destine
- * @src: source
- * @n: bytes
- *
- * Return: string
- */
-
-char *_strncpy(char *dest, const char *src, size_t n)
-{
-	size_t i;
-
-	for (i = 0; i < n && src[i] != '\0'; i++)
-		dest[i] = src[i];
-	for (; i < n; i++)
-		dest[i] = '\0';
-	return (dest);
-}
-
-/**
  * assign_lineptr - lineptr variable for _getline
  *
  * @lineptr: input
@@ -134,7 +113,6 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 
 		if (input >= 120)
 			buffer = _realloc(buffer, input + 1);
-
 		buffer[input] = c;
 		input++;
 	}

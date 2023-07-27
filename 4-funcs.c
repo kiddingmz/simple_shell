@@ -72,43 +72,8 @@ char *_realloc(char *src, size_t size)
 
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 {
-	size_t size, i = 0;
-	int c;
-	static char *buffer;
-
-	if (lineptr == NULL || n == NULL)
-		return (-1);
-
-	if (buffer == NULL)
-	{
-		size = 120;
-		buffer = allocator(size);
-		if (buffer == NULL)
-			return (-1);
-	}
-	while ((c = read(fileno(stream), buffer + i, 1)) == 1)
-	{
-		if (buffer[i] == '\n')
-			break;
-		if (i == size)
-		{
-			size *= 2;
-			buffer = _realloc(buffer, size);
-			if (buffer == NULL)
-				return (-1);
-		}
-		i++;
-	}
-	if (c == 0 || c == -1)
-	{
-		buffer[i] = '\0';
-		return (-1);
-	}
-	buffer[i] = '\n';
-	buffer[i + 1] = '\0';
-	*lineptr = buffer;
-	*n = i + 1;
-	return (i + 1);
+	
+	return(getline(lineptr, n, stream));
 }
 
 /**

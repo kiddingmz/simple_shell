@@ -21,7 +21,7 @@ void interactive(int ac, char **av, char **env)
 	while (1)
 	{
 		_putstring("$ ");
-		num_buffer = getline(&command, &size_buffer, stdin);
+		num_buffer = _getline(&command, &size_buffer, stdin);
 		if (num_buffer == -1)
 		{
 			if (command != NULL)

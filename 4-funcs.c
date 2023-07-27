@@ -61,22 +61,6 @@ char *_realloc(char *src, size_t size)
 }
 
 /**
- * _getline - input data
- *
- * @lineptr: input
- * @n: size
- * @stream: stream
- *
- * Return: ssize_t
- */
-
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
-{
-	
-	return(getline(lineptr, n, stream));
-}
-
-/**
  * process_args - process arguments
  *
  * @data: data

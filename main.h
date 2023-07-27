@@ -38,6 +38,7 @@ char *_strncpy(char *, const char *, size_t);
 char *allocator(size_t);
 char *_realloc(char *, size_t);
 ssize_t _getline(char **, size_t *, FILE *);
+void assign_lineptr(char **, size_t *, char *, size_t);
 char **process_args(char *);
 char *_cpy_arg(char **);
 int _atoi(char *);

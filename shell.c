@@ -1,53 +1,38 @@
 #include "main.h"
 
 /**
- * main - entry point
+ * main - test shell
  *
- * @ac: number of arguments
- * @av: array
- * @env: env
- *
- * Return: 0 sucess
+ * Return: int
  */
 
-int main(int ac, char **av, char **env)
+int main(void)
 {
-	size_t i;
-	ssize_t nu;
-	char *buffer = NULL;
-	char *sub_command = NULL;
-	char **data = NULL;
+	char *input;
+	char **args;
+	int status;
 
-	if (isatty(fileno(stdin)))
-	{
-		if (ac == 1)
-			interactive(ac, av, env);
-		else
-			non_interactive(ac, av, env);
-	}
-	else
-	{
-		while ((nu = _getline(&buffer, &i, stdin)) != -1)
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
+	signal(SIGTSTP, handle_sigstp);
+
+	do {
+		input = _getinput();
+		if (!input || !*input)
+			break;
+
+		args = tokenize_input(input);
+		if (!args || !*args)
 		{
-			if (buffer[0] != '\n' && buffer[1] != '\0')
-			{
-				buffer[nu - 1] = '\0';
-				buffer = _strtrim(buffer);
-				if (buffer != NULL)
-				{
-					sub_command = _strdup(buffer);
-					_strtok(sub_command, " ");
-					data = process_args(buffer);
-					fflush(stdout);
-					_exe(ac, data, sub_command, av[0], env);
-					_free_array(data);
-				}
-			}
-			free(sub_command);
-			buffer = NULL;
-			sub_command = NULL;
-			data = NULL;
+			free(input);
+			free_array(args);
+			continue;
 		}
-	}
-	return (0);
+		status = _execute(args);
+		free(input);
+		free_array(args);
+		status = 1;
+	} while (status);
+
+	return (EXIT_SUCCESS);
 }

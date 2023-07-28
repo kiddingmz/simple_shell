@@ -1,156 +1,126 @@
 #include "main.h"
 
 /**
- * _strdup - copy string
+ * _atoi - convert string to int
  *
  * @str: string
  *
- * Return: string
+ * Return: int
  */
 
-char *_strdup(char *str)
+int _atoi(const char *str)
 {
-	size_t len, i;
-	char *string = NULL;
+	int i, sign;
+	unsigned int num;
 
-	if (str == NULL)
-		return (NULL);
-	len = _strlen(str);
-	string = malloc(sizeof(char) * (len + 1));
-	if (string == NULL)
-		return (NULL);
 	i = 0;
-	while (str[i])
+	sign = 1;
+	num = 0;
+
+	while (str[i] != '\0')
 	{
-		string[i] = str[i];
+		if (str[i] == '-')
+			sign *= -1;
+		else if (str[i] >= '0' && str[i] <= '9')
+			num = (num * 10) + (str[i] - '0');
+		else
+			break;
 		i++;
 	}
-	string[i] = '\0';
-	return (string);
+	return (num * sign);
 }
 
 /**
- * _strtok - breaks a string
+ * _memset - inicialization the memory
  *
- * @str: string
- * @delim: delimiter
+ * @s: area
+ * @b: bytes
+ * @n: amount
  *
- * Return: string
+ * Return: pointer
  */
 
-char *_strtok(char *str, const char *delim)
+char *_memset(char *s, char b, unsigned int n)
 {
-	static char *token;
-	char *string = NULL;
-	const char *c;
+	unsigned int i;
 
-	if (str)
-		token = str;
-	while (*token)
-	{
-		for (c = delim; *c; ++c)
-		{
-			if (*token == *c)
-				break;
-		}
-		if (!*c)
-		{
-			break;
-		}
-		++token;
-	}
-	if (!*token)
-		return (NULL);
-	string = token;
-
-	while (*token)
-	{
-		for (c = delim; *c; ++c)
-		{
-			if (*token == *c)
-				break;
-		}
-		if (*c)
-			break;
-		++token;
-	}
-	if (*token)
-		*token++ = '\0';
-	return (string);
+	for (i = 0; i < n; i++)
+		s[i] = b;
+	return (s);
 }
 
 /**
- * _strcat - append a string
+ * _memcpy - function that copies memory area
  *
- * @dest: destine
- * @src: source
+ * @dest: buffer
+ * @src: copy
+ * @n: bytes
  *
- * Return: string
- */
+ * Return: pointer
+*/
 
-char *_strcat(char *dest, char *src)
+char *_memcpy(char *dest, char *src, unsigned int n)
 {
-	size_t i, n, d;
+	unsigned int i;
 
-	d = _strlen(dest);
-	n = _strlen(src);
-	for (i = 0; i < n && src[i] != '\0'; i++)
-		dest[d++] = src[i];
-	dest[d] = '\0';
-	return (dest);
-}
-
-/**
- * _strcat_space - append a string
- *
- * @dest: destine
- * @src: source
- *
- * Return: string
- */
-
-char *_strcat_space(char *dest, char *src)
-{
-	/*
-	 *
-	size_t i, n, d;
-
-	if (dest != NULL)
-		d = _strlen(dest);
-	else
-		d = 0;
-	n = _strlen(src);
-	for (i = 0; i < n && src[i] != '\0'; i++)
-		dest[d++] = src[i];
-	dest[d] = 32;
-	return (dest);
-	*/
-	size_t i, n, d;
-
-	d = _strlen(dest);
-	n = _strlen(src);
-	for (i = 0; i < n && src[i] != '\0'; i++)
-		dest[d++] = src[i];
-	dest[d++] = ' ';
-	dest[d] = '\0';
-	return (dest);
-}
-
-/**
- * _strcpy - copy a string
- *
- * @dest: destine
- * @src: source
- *
- * Return: string
- */
-
-char *_strcpy(char *dest, const char *src)
-{
-	size_t i;
-
-	for (i = 0 ; src[i] != '\0'; i++)
+	for (i = 0; i < n; i++)
 		dest[i] = src[i];
-	dest[i] = '\0';
 	return (dest);
+}
+
+/**
+ * _realloc - reallocates a block of memory
+ *
+ * @ptr: pointer
+ * @old_size: byte size
+ * @new_size: byte size
+ *
+ * Return: pointer
+ */
+
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
+{
+	char *p;
+
+	if (!ptr)
+		return (malloc(new_size));
+	if (!new_size)
+		return (free(ptr), NULL);
+	if (new_size == old_size)
+		return (ptr);
+
+	p = malloc(new_size);
+	if (!p)
+		return (NULL);
+
+	old_size = old_size < new_size ? old_size : new_size;
+	while (old_size--)
+		p[old_size] = ((char *)ptr)[old_size];
+	free(ptr);
+	return (p);
+}
+
+/**
+ * _calloc - a function that allocates
+ *
+ * @nmemb: size
+ * @size: size
+ *
+ * Return: pointer
+ */
+
+void *_calloc(unsigned int nmemb, unsigned int size)
+{
+	char *p;
+
+	if (nmemb == 0 || size == 0)
+		return (NULL);
+
+	p = malloc(nmemb * size);
+	if (p == NULL)
+		return (NULL);
+
+	_memset(p, 0, nmemb * size);
+
+	return (p);
 }

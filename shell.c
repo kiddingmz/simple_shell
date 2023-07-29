@@ -60,7 +60,7 @@ int main(int argc, __attribute__((unused)) char *argv[])
 	}
 	else
 	{
-		while ((nu = getline(&buffer, &i, stdin)) != -1)
+		while ((nu = _getline(&buffer, &i, stdin)) != -1)
 		{
 			args = tokenize_input(buffer);
 			if (!args || !*args)

@@ -22,7 +22,7 @@
 extern char **environ;
 char *_getinput(void);
 void free_last_input(void);
-void *_getline(void);
+void *__getline(void);
 int _check_command(char **);
 int execute_buitlin(char *, char **);
 void _help(void);
@@ -60,4 +60,8 @@ char *_memset(char *, char, unsigned int);
 char *_memcpy(char *, char *, unsigned int);
 void *_realloc(void *, unsigned int, unsigned int);
 void *_calloc(unsigned int, unsigned int);
+char *allocator(size_t );
+void assign_lineptr(char **lineptr, size_t *n, char *buffer, size_t b);
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
+char *__realloc(char *src, size_t size);
 #endif

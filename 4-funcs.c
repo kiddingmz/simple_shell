@@ -86,12 +86,12 @@ void free_last_input(void)
 }
 
 /**
- * _getline - read input stdin
+ * __getline - read input stdin
  *
  * Return: pointer
  */
 
-void *_getline(void)
+void *__getline(void)
 {
 	static char buffer[BUFFER_SIZE];
 	static int buf_pos, buf_size;

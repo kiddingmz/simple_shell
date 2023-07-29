@@ -1,142 +1,41 @@
 #include "main.h"
 
-void __cd(char *dir);
-
 /**
- * __cd - cd
- *
- * @dir: dir
- *
- * Return: nothing
- */
-
-void __cd(char *dir)
-{
-	char *prev_dir = NULL;
-
-	if (dir != NULL)
-	{
-		char current_dir[4096];
-
-		if (getcwd(current_dir, sizeof(current_dir)) == NULL)
-		{
-			perror("cd");
-			return;
-		}
-
-		prev_dir = _strdup(current_dir);
-		if (prev_dir == NULL)
-		{
-			perror("cd");
-			return;
-		}
-
-		if (setenv("OLDPWD", prev_dir, 1) == -1)
-		{
-			perror("cd");
-			free(prev_dir);
-			return;
-		}
-
-		if (chdir(dir) == -1)
-		{
-			perror("cd");
-			free(prev_dir);
-			return;
-		}
-		free(prev_dir);
-	}
-}
-
-/**
- * __getenv - getenv
- *
- * @name: name
- *
- * Return: string
- */
-
-char *__getenv(const char *name)
-{
-	size_t namelen = _strlen(name);
-	char **env = environ;
-
-	for (; *env != NULL; env++)
-	{
-		if (_strncmp(*env, name, namelen) == 0 && (*env)[namelen] == '=')
-			return (&(*env)[namelen + 1]);
-	}
-
-	return (NULL);
-}
-
-/**
- * _cd - change current directory
- *
- * @args: array of arguments
- *
- * Return: nothing
- */
-
-
-void _cd(char **args)
-{
-	char *dir = args[1];
-
-	if (dir == NULL || !_strcmp(dir, ""))
-	{
-		dir = __getenv("HOME");
-		if (dir == NULL)
-		_putstring("cd: HOME not set\n");
-	}
-	else if (!_strcmp(dir, "-"))
-	{
-		dir = __getenv("OLDPWD");
-		if (dir == NULL)
-			_putstring("cd: OLDPWD not set\n");
-		return;
-	}
-	_putstring(dir);
-	_putstring("\n");
-	__cd(dir);
-}
-
-/**
- * _setenv - set env variable
+ * _setenv - set env
  *
  * @args: arguments
  *
- * Return: int
+ * Return: nothing
  */
 
 int _setenv(char **args)
 {
-	char *value;
+	char *name, *value;
 
 	if (args[1] == NULL)
 	{
-		_putstring("Usage: setenv VARIABLE VALUE\n");
+		_puterror("Usage: setenv VARIABLE VALUE\n");
 		return (-1);
 	}
 
+	name = args[1];
 	value = args[2];
 	if (value == NULL)
 		value = "";
-
-	if (setenv(args[1], value, 1) != 0)
+	if (setenv(name, value, 1) != 0)
 	{
-		_putstring("setenv");
+		_puterror("setenv");
 		return (-1);
 	}
 	return (0);
 }
 
 /**
- * _unsetenv - unset env variable
+ * _unsetenv - unset env
  *
  * @args: arguments
  *
- * Return: int
+ * Return: nothing
  */
 
 int _unsetenv(char **args)
@@ -145,13 +44,57 @@ int _unsetenv(char **args)
 
 	if (args[1] == NULL)
 	{
-		_putstring("Usage: unsetenv VARIABLE\n");
+		_puterror("Usage: unsetenv VARIABLE\n");
 		return (-1);
 	}
 
 	name = args[1];
 
 	if (unsetenv(name) != 0)
-		_putstring("unsetenv");
+	{
+		_puterror("unsetenv");
+	}
 	return (0);
+}
+
+/**
+ * _putstring - Print the string
+ *
+ * @str: string
+ *
+ * Return: nothing
+ */
+
+void _putstring(char *str)
+{
+	size_t len;
+	ssize_t num_written;
+
+	len = _strlen(str);
+	num_written = write(STDOUT_FILENO, str, len);
+	if (num_written == -1)
+	{
+		perror("write");
+	}
+}
+
+/**
+ * _puterror - print error
+ *
+ * @err: error message
+ *
+ * Return: nothing
+ */
+
+void _puterror(char *err)
+{
+	size_t len;
+	ssize_t num_written;
+
+	len = _strlen(err);
+	num_written = write(STDERR_FILENO, err, len);
+	if (num_written == -1)
+	{
+		perror("write");
+	}
 }

@@ -1,125 +1,109 @@
 #include "main.h"
 
 /**
- * _strtrim - remove space in a string
+ * _check_command - check the command
  *
- * @str: string
+ * @args: argumetns
  *
- * Return: string
- *
+ * Return: int
  */
 
-char *_strtrim(char *str)
+int _check_command(char **args)
 {
-	size_t len = _strlen(str);
-	size_t start = 0, end = len - 1;
-
-	if (str == NULL)
-		return (NULL);
-	while (end > 0 && _isspace(str[end]))
-		end--;
-	if (end == 0 && _isspace(str[end]))
-		return (NULL);
-	while (_isspace(str[start]))
-		start++;
-	if (start > 0)
-	{
-		_memmove(str, str + start, len - start + 1);
-		len -= start;
-	}
-	end = len - 1;
-	while (end > 0 && _isspace(str[end]))
-		end--;
-	str[end + 1] = '\0';
-	return (str);
+	if (!args[0])
+		return (0);
+	if (!_strcmp(args[0], "exit"))
+		exit_status(args);
+	else if (!_strcmp(args[0], "env"))
+		_env();
+	else if (!_strcmp(args[0], "setenv"))
+		_setenv(args);
+	else if (!_strcmp(args[0], "unsetenv"))
+		_unsetenv(args);
+	else if (!_strcmp(args[0], "cd"))
+		_cd(args);
+	else if (!_strcmp(args[0], "clear"))
+		_clear(args);
+	else
+		return (0);
+	return (1);
 }
 
 /**
- * assign_lineptr - lineptr variable for _getline
+ * _cd - change the current directory
  *
- * @lineptr: input
- * @n:size
- * @buffer: buffer
- * @b: size of buffer
+ * @args: argumetns
  *
  * Return: nothing
  */
 
-void assign_lineptr(char **lineptr, size_t *n, char *buffer, size_t b)
+void _cd(char **args)
 {
-	if (*lineptr == NULL)
+	char *dir = args[1];
+
+	if (dir == NULL)
 	{
-		if (b > 120)
-			*n = b;
-		else
-			*n = 120;
-		*lineptr = buffer;
+		dir = _getenv("HOME");
+		if (dir == NULL)
+		{
+			_putstring("cd: HOME not set\n");
+			return;
+		}
 	}
-	else if (*n < b)
-	{
-		if (b > 120)
-			*n = b;
-		else
-			*n = 120;
-		*lineptr = buffer;
-	}
-	else
-	{
-		_strcpy(*lineptr, buffer);
-		free(buffer);
-	}
+
+	if (chdir(dir) == -1)
+		perror("cd");
 }
 
 /**
- * _getline - input data
+ * _clear - clear screnn of terminal
  *
- * @lineptr: input
- * @n: size
- * @stream: stream
+ * @args: arguments
  *
- * Return: ssize_t
+ * Return: int
  */
 
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
+int _clear(char **args)
 {
-	static ssize_t input;
-	ssize_t ret;
-	char c = 'x', *buffer;
-	int r;
+	(void)args;
+	_putstring("\033[2J\033[H");
+	return (1);
+}
 
-	if (input == 0)
-		fflush(stream);
-	else
-		return (-1);
-	input = 0;
+/**
+ * _env - Prints all the environment
+ *
+ * Return: nothing
+ */
 
-	buffer = allocator(120);
-	if (!buffer)
-		return (-1);
+int _env(void)
+{
+	int i;
 
-	while (c != '\n')
+	for (i = 0; environ[i]; i++)
 	{
-		r = read(STDIN_FILENO, &c, 1);
-		if (r == -1 || (r == 0 && input == 0))
-		{
-			free(buffer);
-			return (-1);
-		}
-		if (r == 0 && input != 0)
-		{
-			input++;
-			break;
-		}
-
-		if (input >= 120)
-			buffer = _realloc(buffer, input + 1);
-		buffer[input] = c;
-		input++;
+		_putstring(environ[i]);
+		_putchar('\n');
 	}
-	buffer[input] = '\0';
-	assign_lineptr(lineptr, n, buffer, input);
-	ret = input;
-	if (r != 0)
-		input = 0;
-	return (ret);
+
+	return (0);
+}
+
+/**
+ * exit_status - exit status
+ *
+ * @args: arguments
+ *
+ * Return: nothing
+ */
+
+void exit_status(char **args)
+{
+	int status = 0;
+
+	if (args[1] != NULL)
+		status = _atoi(args[1]);
+	free_array(args);
+	free_last_input();
+	exit(status);
 }

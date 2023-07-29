@@ -1,53 +1,78 @@
 #include "main.h"
 
+void _exe(void);
+
 /**
- * main - entry point
+ * _exe - interactive mode
  *
- * @ac: number of arguments
- * @av: array
- * @env: env
- *
- * Return: 0 sucess
+ * Return: nothing
  */
 
-int main(int ac, char **av, char **env)
+void _exe(void)
+{
+	char *input;
+	char **args;
+	int status;
+
+	do {
+		input = _getinput();
+		if (!input || !*input)
+			break;
+
+		args = tokenize_input(input);
+		if (!args || !*args)
+		{
+			free(input);
+			free_array(args);
+			continue;
+		}
+		status = _execute(args);
+		free(input);
+		free_array(args);
+		status = 1;
+	} while (status);
+}
+
+/**
+ * main - test shell
+ *
+ * @argc: argc
+ * @argv: argv
+ *
+ * Return: int
+ */
+
+int main(int argc, __attribute__((unused)) char *argv[])
 {
 	size_t i;
 	ssize_t nu;
 	char *buffer = NULL;
-	char *sub_command = NULL;
-	char **data = NULL;
+	char **args;
+
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
+	signal(SIGTSTP, handle_sigstp);
 
 	if (isatty(fileno(stdin)))
 	{
-		if (ac == 1)
-			interactive(ac, av, env);
-		else
-			non_interactive(ac, av, env);
+		if (argc == 1)
+			_exe();
 	}
 	else
 	{
-		while ((nu = _getline(&buffer, &i, stdin)) != -1)
+		while ((nu = getline(&buffer, &i, stdin)) != -1)
 		{
-			if (buffer[0] != '\n' && buffer[1] != '\0')
+			args = tokenize_input(buffer);
+			if (!args || !*args)
 			{
-				buffer[nu - 1] = '\0';
-				buffer = _strtrim(buffer);
-				if (buffer != NULL)
-				{
-					sub_command = _strdup(buffer);
-					_strtok(sub_command, " ");
-					data = process_args(buffer);
-					fflush(stdout);
-					_exe(ac, data, sub_command, av[0], env);
-					_free_array(data);
-				}
+				free(buffer);
+				free_array(args);
+				continue;
 			}
-			free(sub_command);
-			buffer = NULL;
-			sub_command = NULL;
-			data = NULL;
+			_execute(args);
+			free(buffer);
+			free_array(args);
 		}
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }

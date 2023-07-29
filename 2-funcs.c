@@ -1,43 +1,78 @@
 #include "main.h"
 
 /**
- * check_path - check path
+ * _strcpy - copy string
  *
- * @path: string
+ * @dest: destine
+ * @src: source
  *
- * Return: int
+ * Return: pointer
  */
 
-int check_path(char *path)
+char *_strcpy(char *dest, char *src)
 {
-	struct stat buffer;
+	int i = 0;
 
-	if (stat(path, &buffer) == 0)
-		return (1);
-	return (0);
+	if (dest == src || src == 0)
+		return (dest);
+	while (src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = 0;
+	return (dest);
 }
 
 /**
- * _free_array - free array
+ * _strcat - join two string
  *
- * @av: array
+ * @dest: destine
+ * @src: source
  *
- * Return: nothing
+ * Return: pointer
  */
 
-void _free_array(char **av)
+char *_strcat(char *dest, const char *src)
 {
-	size_t i;
+	char *ret = dest;
 
-	i = 0;
-	while (av[i] != NULL)
-		free(av[i++]);
-	free(av);
+	while (*dest)
+		dest++;
+	while (*src)
+		*dest++ = *src++;
+	*dest = *src;
+	return (ret);
 }
 
 /**
- * _putchar - print a char
+ * _strdup - duplicates a string
  *
+ * @str: string
+ *
+ * Return: pointer
+ */
+
+char *_strdup(const char *str)
+{
+	int length = 0;
+	char *ret;
+
+	if (str == NULL)
+		return (NULL);
+	while (*str++)
+		length++;
+	ret = malloc(sizeof(char) * (length + 1));
+	if (!ret)
+		return (NULL);
+	for (length++; length--;)
+		ret[length] = *--str;
+	return (ret);
+}
+
+/**
+ *_putchar - print char
+
  * @c: char
  *
  * Return: int
@@ -49,45 +84,28 @@ int _putchar(char c)
 }
 
 /**
- * _putstring - print string
+ * _strspn - get string
  *
- * @str: string
+ * @s: string
+ * @accept: prefix
  *
- * Return: lenght
+ * Return: unsigned int
  */
 
-int _putstring(const char *str)
+unsigned int _strspn(char *s, char *accept)
 {
-	unsigned int i;
-	char *err = "(null)";
+	unsigned int i, j;
 
-	if (str == NULL || str == (void *)0)
+	for (i = 0; s[i]; i++)
 	{
-		for (i = 0; err[i] != '\0'; i++)
-			_putchar(err[i]);
-		return (6);
+		for (j = 0; accept[j]; j++)
+		{
+			if (s[i] == accept[j])
+				break;
+		}
+		if (!accept[j])
+			return (i);
 	}
-	for (i = 0; str[i] != '\0'; i++)
-		_putchar(str[i]);
+
 	return (i);
-}
-
-/**
- * _putenv - print env
- *
- * @env: env
- *
- * Return: nothing
- */
-
-void _putenv(char **env)
-{
-	unsigned int i;
-
-	i = 0;
-	while (env[i])
-	{
-		_putstring(env[i++]);
-		_putchar('\n');
-	}
 }

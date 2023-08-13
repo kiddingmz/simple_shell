@@ -32,7 +32,6 @@ void _free_array(char **av)
 	i = 0;
 	while (av[i] != NULL)
 		free(av[i++]);
-	free(av);
 }
 
 /**

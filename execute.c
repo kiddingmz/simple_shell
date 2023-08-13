@@ -25,7 +25,10 @@ void _exe(__attribute__((unused)) int ac, char **av, char *c,
 		{
 			pid = fork();
 			if (pid == -1)
+			{
+				free(path_file);
 				exit(1);
+			}
 			else if (pid == 0)
 			{
 				if (!_strcmp(c, "env"))
@@ -37,6 +40,7 @@ void _exe(__attribute__((unused)) int ac, char **av, char *c,
 			else
 			{
 				wait(NULL);
+				free(path_file);
 			}
 			c = NULL;
 		}
@@ -45,6 +49,5 @@ void _exe(__attribute__((unused)) int ac, char **av, char *c,
 			_putstring(c);
 			_putstring(": command not found\n");
 		}
-		free(path_file);
 	}
 }

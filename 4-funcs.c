@@ -70,7 +70,9 @@ char *_realloc(char *src, size_t size)
  * Return: ssize_t
  */
 
-ssize_t _getline(char **line_pointer, size_t *n, FILE *stream)
+ssize_t _getline(__attribute__((unused))char **line_pointer,
+		__attribute__((unused))size_t *n,
+		__attribute__((unused))FILE * stream)
 {
 	return (0);
 }
@@ -85,8 +87,7 @@ ssize_t _getline(char **line_pointer, size_t *n, FILE *stream)
 
 char **process_args(char *data)
 {
-	char *tmp = NULL;
-	char *str_tmp = NULL;
+	char *tmp = NULL, *str_tmp = NULL;
 	char **all_args = NULL;
 	size_t k, i = 0, num_args = 0, arg_len = 0;
 
@@ -113,6 +114,7 @@ char **process_args(char *data)
 		if (all_args[i] == NULL)
 		{
 			_free_array(all_args);
+			free(all_args);
 			free(tmp);
 			return (NULL);
 		}

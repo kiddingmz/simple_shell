@@ -12,10 +12,9 @@
 
 int main(int ac, char **av, char **env)
 {
-	size_t i;
+	size_t i = 0;
 	ssize_t nu;
-	char *buffer = NULL;
-	char *sub_command = NULL;
+	char *buffer = NULL, *tmp_buffer = NULL, *sub_command = NULL;
 	char **data = NULL;
 
 	if (isatty(fileno(stdin)))
@@ -27,12 +26,15 @@ int main(int ac, char **av, char **env)
 	}
 	else
 	{
-		while ((nu = getline(&buffer, &i, stdin)) != -1)
+		while ((nu = getline(&buffer, &i, stdin)) != EOF)
 		{
 			if (buffer[0] != '\n' && buffer[1] != '\0')
 			{
 				buffer[nu - 1] = '\0';
+				tmp_buffer = buffer;
 				buffer = _strtrim(buffer);
+				if (buffer == NULL)
+					free(tmp_buffer);
 				if (buffer != NULL)
 				{
 					sub_command = _strdup(buffer);
@@ -44,10 +46,9 @@ int main(int ac, char **av, char **env)
 				}
 			}
 			free(sub_command);
-			buffer = NULL;
-			sub_command = NULL;
-			data = NULL;
+			free(data);
 		}
+		free(buffer);
 	}
 	return (0);
 }

@@ -1,158 +1,169 @@
 #include "main.h"
 
-static char *last_input;
-
 /**
- * find_in_path - find the path
+ * allocator - allocate memory
  *
- * @command: command
+ * @n: size
  *
  * Return: pointer
  */
 
-char *find_in_path(char *command)
+char *allocator(size_t n)
 {
-	struct stat st;
-	int stat_ret, i;
-	char buf[PATH_MAX_LENGTH], *path, *ret, **dir;
+	size_t i;
+	char *buff = malloc(sizeof(char) * (n + 1));
 
-	path = _getenv("PATH");
-	if (!path)
-		return (NULL);
-	dir = tokenize(path, PATH_SEPARATOR);
-	if (!dir)
-		return (NULL);
-	for (i = 0; dir[i]; i++)
+	if (!buff)
 	{
-		_memset(buf, 0, PATH_MAX_LENGTH);
-		_strcpy(buf, dir[i]);
-		_strcat(buf, "/");
-		_strcat(buf, command);
-		stat_ret = stat(buf, &st);
-		if (stat_ret == 0 && S_ISREG(st.st_mode) && (st.st_mode & S_IXUSR))
-		{
-			free_array(dir);
-			ret = malloc(sizeof(char) * (strlen(buf) + 1));
-			if (!ret)
-				return (NULL);
-			strcpy(ret, buf);
-			return (ret);
-		}
+		perror("allocate error");
+		return (NULL);
 	}
-	if (stat_ret == -1)
-		free_array(dir);
-	return (NULL);
+
+	for (i = 0; i <= n; i++)
+		buff[i] = '\0';
+	return (buff);
 }
 
-
 /**
- * _getinput - read line
+ * _realloc - realloc space
  *
- * Return: Pointer
+ * @src: source
+ * @size: new size
+ *
+ * Return: string
  */
 
-char *_getinput(void)
+char *_realloc(char *src, size_t size)
 {
-	char *input = NULL;
-	size_t input_size = 0;
-	ssize_t nread;
+	char *dest;
+	size_t i = 0;
 
-	do {
-		_putstring("$ ");
-		fflush(stdout);
-		nread = getline(&input, &input_size, stdin);
-		if (nread == -1)
+	if (src == NULL)
+		return (allocator(size));
+	if (size == 0)
+	{
+		free(src);
+		return (NULL);
+	}
+	dest = allocator(size);
+	if (dest == NULL)
+	{
+		free(src);
+		return (NULL);
+	}
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	free(src);
+	return (dest);
+}
+
+/**
+ * _getline - input data
+ *
+ * @line_pointer: input
+ * @n: size
+ * @stream: stream
+ *
+ * Return: ssize_t
+ */
+
+ssize_t _getline(char **line_pointer, size_t *n, FILE *stream)
+{
+	ssize_t bytes_read, buffer_size, read_bytes = 0;
+	static char *buffer;
+	char *buffer_loc = NULL;
+
+	if (line_pointer == NULL || n == NULL || stream == NULL)
+		return (-1);
+	if (buffer == NULL || *n == 0)
+	{
+		buffer_size = 120;
+		buffer = allocator(buffer_size);
+		if (buffer == NULL)
+			return (-1);
+	}
+	else
+		buffer_size = *n;
+	buffer_loc = buffer;
+	while ((bytes_read = read(fileno(stream), buffer_loc, 1)) > 0)
+	{
+		read_bytes++;
+		if (read_bytes >= buffer_size)
 		{
-			free(input);
-			_putstring("\n");
+			buffer_size *= 2;
+			buffer = _realloc(buffer, buffer_size);
+			if (buffer == NULL)
+				return (-1);
+			buffer_loc = buffer + read_bytes;
+		}
+		if (buffer[read_bytes - 1] == '\n')
+			break;
+		buffer_loc++;
+	}
+	if (bytes_read == -1 || bytes_read == 0)
+	{
+		free(buffer);
+		*line_pointer = NULL;
+		*n = 0;
+		return (-1);
+	}
+	buffer[read_bytes] = '\0';
+	*line_pointer = buffer;
+	*n = buffer_size;
+	return (read_bytes);
+}
+
+/**
+ * process_args - process arguments
+ *
+ * @data: data
+ *
+ * Return: matrix
+ */
+
+char **process_args(char *data)
+{
+	char *tmp = NULL;
+	char *str_tmp = NULL;
+	char **all_args = NULL;
+	size_t k, i = 0, num_args = 0, arg_len = 0;
+
+	if (data == NULL)
+		return (NULL);
+	tmp = _strdup(data);
+	str_tmp = _strtok(tmp, " ");
+	while (str_tmp != NULL)
+	{
+		num_args++;
+		str_tmp = _strtok(NULL, " ");
+	}
+	all_args = malloc(sizeof(char *) * (num_args + 1));
+	if (all_args == NULL)
+	{
+		free(tmp);
+		return (NULL);
+	}
+	str_tmp = _strtok(data, " ");
+	while (str_tmp != NULL && i < num_args)
+	{
+		arg_len = _strlen(str_tmp);
+		all_args[i] = malloc(arg_len + 1);
+		if (all_args[i] == NULL)
+		{
+			_free_array(all_args);
+			free(tmp);
 			return (NULL);
 		}
-		input[nread - 1] = '\0';
-	} while (input[0] == '\0' || isspace(input[0]));
-	last_input = input;
-	return (input);
-}
-
-/**
- * free_last_input - free last input
- *
- * Return: nothing
- */
-
-void free_last_input(void)
-{
-	free(last_input);
-	last_input = NULL;
-}
-
-/**
- * __getline - read input stdin
- *
- * Return: pointer
- */
-
-void *__getline(void)
-{
-	static char buffer[BUFFER_SIZE];
-	static int buf_pos, buf_size;
-	char *input_str = NULL;
-	char current_char;
-	int input_len = 0;
-
-	while (1)
-	{
-		if (buf_pos >= buf_size)
-		{
-			buf_size = read(STDIN_FILENO, buffer, BUFFER_SIZE);
-			buf_pos = 0;
-			if (buf_size == 0)
-				return (input_str);
-			else if (buf_size < 0)
-			{
-				perror("read");
-				return (NULL);
-			}
-		}
-
-		current_char = buffer[buf_pos];
-
-		buf_pos++;
-
-		if (current_char == '\n')
-		{
-			input_str = realloc(input_str, input_len + 1);
-			input_str[input_len] = '\0';
-			return (input_str);
-		}
-		else
-		{
-			input_str = realloc(input_str, input_len + 1);
-			input_str[input_len] = current_char;
-			input_len++;
-		}
+		for (k = 0; k < arg_len; k++)
+			all_args[i][k] = str_tmp[k];
+		all_args[i][arg_len] = '\0';
+		str_tmp = _strtok(NULL, " ");
+		i++;
 	}
-}
-
-/**
- * _getenv - get env
- *
- * @name: name of env
- *
- * Return: pointer
- */
-
-char *_getenv(const char *name)
-{
-	char **env;
-	size_t name_len = _strlen(name);
-
-	for (env = environ; *env != NULL; env++)
-	{
-		if (_strncmp(*env, name, name_len) == 0 && (*env)[name_len] == '=')
-		{
-			return (&(*env)[name_len + 1]);
-		}
-	}
-
-	return (NULL);
+	all_args[i] = NULL;
+	free(tmp);
+	return (all_args);
 }

@@ -1,127 +1,144 @@
 #include "main.h"
 
 /**
- * free_error - free allocaded memomry
+ * _cpy_arg - copy arguments
  *
- * @argv: argv
- * @arg: arg
+ * @data: matrix
  *
- * Return: nothing
+ * Return: string
+ *
  */
 
-void free_error(char **argv, char *arg)
+char *_cpy_arg(char **data)
 {
-	int i;
+	size_t i, size, j;
+	char *arg = NULL;
 
-	for (i = 0; argv[i]; i++)
-		free(argv[i]);
-	free(argv);
-	free(arg);
-	exit(EXIT_FAILURE);
-}
+	if (data == NULL)
+		return (NULL);
+	size = 0;
+	for (i = 1; data[i] != NULL; i++)
+		size += _strlen(data[i]);
 
-/**
- * free_array - free memory
- *
- * @ptr: pointer
- *
- * Return: nothing
- */
-
-void free_array(char **ptr)
-{
-	int i;
-
-	for (i = 0; ptr[i]; i++)
-		free((ptr[i]));
-	free(ptr);
-}
-
-
-/**
- * free_path - free global env
- *
- * Return: Nothing
- */
-
-void free_path(void)
-{
-	if (environ != NULL)
-	{
-		size_t i = 0;
-
-		while (environ[i] != NULL)
-		{
-			if (_strncmp(environ[i], "PATH=", 5) == 0)
-			{
-				free(environ[i]);
-				environ[i] = NULL;
-				break;
-			}
-			i++;
-		}
-	}
-}
-
-/**
- * tokenize - parsing user input
- *
- * @str: string
- * @delim: delimiter
- *
- * Return: pointer to pointer
- */
-
-char **tokenize(char *str, const char *delim)
-{
-	char *token = NULL;
-	char **retur = NULL;
-	int i = 0;
-
-	token = strtok(str, delim);
-	while (token)
-	{
-		retur = realloc(retur, sizeof(char *) * (i + 1));
-		if (retur == NULL)
-			return (NULL);
-
-		retur[i] = malloc(_strlen(token) + 1);
-		if (!(retur[i]))
-			return (NULL);
-
-		_strcpy(retur[i], token);
-		token = strtok(NULL, delim);
-		i++;
-	}
-	retur = realloc(retur, (i + 1) * sizeof(char *));
-	if (!retur)
+	/*arg = malloc(sizeof(char) * (size + i));*/
+	arg = allocator(size + i);
+	if (arg == NULL)
 		return (NULL);
 
-	retur[i] = NULL;
-	return (retur);
+	for (j = 0; j < (size + i); j++)
+		arg[j] = '\0';
+	j = 1;
+	while (j < i)
+	{
+		_strcat_space(arg, data[j]);
+		j++;
+	}
+	return (arg);
 }
 
 /**
- * tokenize_input - splits a user input
+ * _atoi - convert string to int
  *
- * @input: string
+ * @s: string
  *
- * Return: pointer to pointer
+ * Return: int
  */
-char **tokenize_input(char *input)
-{
-	char **tokens = NULL;
-	char *tmp = NULL;
 
-	tmp = _strdup(input);
-	if (tmp == NULL)
+int _atoi(char *s)
+{
+	int i, d, n, len, f, digit;
+
+	i = d = n = len = f = 0;
+	while (s[len] != '\0')
+		len++;
+
+	while (i < len && f == 0)
 	{
-		_putstring("Memory allocation error\n");
-		exit(EXIT_FAILURE);
+		if (s[i] == '-')
+			++d;
+
+		if (s[i] >= '0' && s[i] <= '9')
+		{
+			digit = s[i] - '0';
+			if (d % 2)
+				digit = -digit;
+			n = n * 10 + digit;
+			f = 1;
+			if (s[i + 1] < '0' || s[i + 1] > '9')
+				break;
+			f = 0;
+		}
+		i++;
 	}
 
-	tokens = tokenize(tmp, " \t\r\n\a");
-	free(tmp);
+	if (f == 0)
+		return (0);
+	return (n);
+}
 
-	return (tokens);
+/**
+ * _memcpy - copy to another pointer
+ *
+ * @dest: destine
+ * @src: source
+ * @n: size
+ *
+ * Return: string
+ *
+ */
+
+char *_memcpy(char *dest, const char *src, size_t n)
+{
+	size_t i;
+
+	for (i = 0; i < n; i++)
+		dest[i] = src[i];
+	return (dest);
+}
+
+/**
+ * _memmove - move to onother pointer
+ *
+ * @dest: destine
+ * @src: source
+ * @n: size
+ *
+ * Return: string
+ *
+ */
+
+char *_memmove(char *dest, const char *src, size_t n)
+{
+	if ((src == NULL) || (dest == NULL))
+		return (NULL);
+	if ((src < dest) && (dest < src + n))
+	{
+		dest += n;
+		src += n;
+		while (n--)
+			*--dest = *--src;
+	}
+	else
+	{
+		while (n--)
+			*dest++ = *src++;
+	}
+	return (dest);
+}
+
+/**
+ * _isspace - check space in a string
+ *
+ * @c: char
+ *
+ * Return: int
+ *
+ */
+
+int _isspace(int c)
+{
+	if (c == ' ' || c == '\t' || c == '\n' || c == '\r' ||
+		c == '\v' || c == '\f')
+		return (1);
+	return (0);
 }

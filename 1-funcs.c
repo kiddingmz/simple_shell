@@ -1,128 +1,141 @@
 #include "main.h"
 
 /**
- * _strlen - length
+ * _strcmp - compare two strings
  *
- * @s: string
- *
- * Return: int
- */
-
-int _strlen(const char *s)
-{
-	int i = 0;
-
-	if (!s)
-		return (0);
-
-	while (*s++)
-		i++;
-	return (i);
-}
-
-/**
- * _strcmp - Compare two strings
- *
- * @s1: first string
- * @s2: second string
+ * @dest: destine
+ * @src: source
  *
  * Return: int
  */
 
-int _strcmp(const char *s1, const char *s2)
+int _strcmp(const char *dest, const char *src)
 {
-	while (*s1 != '\0' && *s2 != '\0' && *s1 == *s2)
+	size_t i;
+
+	i = 0;
+	while (dest[i] || src[i])
 	{
-		s1++;
-		s2++;
-	}
-
-	return ((int) (*s1) - (*s2));
-}
-
-/**
- * _strncmp - compare two string length
- *
- * @s1: first string
- * @s2: second string
- * @n: number of bytes
- *
- * Return: int
- */
-
-int _strncmp(const char *s1, const char *s2, size_t n)
-{
-	unsigned char c1, c2;
-
-	while (n-- > 0)
-	{
-		c1 = (unsigned char) *s1++;
-		c2 = (unsigned char) *s2++;
-
-		if (c1 != c2)
-			return (c1 - c2);
-		if (c1 == '\0')
+		if (dest[i] == src[i])
+			i++;
+		else
 			break;
 	}
 
-	return (0);
+	if (dest[i] == '\0' && src[i] == '\0')
+		return (0);
+	return (1);
 }
 
 /**
- * _strstr - check string
+ * _getenv - get path
  *
- * @haystack: search
- * @needle: subtring
+ * @name: name of path
  *
- * Return: pointer
+ * Return: string
  */
 
-char *_strstr(char *haystack, char *needle)
+char *_getenv(char *name)
 {
-	int i;
+	char *sub_path = NULL;
+	size_t i, j;
 
-	for (i = 0; haystack[i] != '\0'; i++)
+	if (name != NULL || (name[0] != '\n' && name[1] != '\0'))
 	{
-		if (haystack[i] == needle[0])
+		i = 0;
+		while (environ[i])
 		{
-			int j;
-
-			for (j = 0; needle[j] != '\0'; j++)
-			{
-				if (haystack[i + j] != needle[j])
-				{
-					break;
-				}
-			}
-
-			if (needle[j] == '\0')
-			{
-				return (&haystack[i]);
-			}
+			sub_path = environ[i];
+			j = 0;
+			while (sub_path[j] != '=' && sub_path[j] == name[j]
+					&& sub_path[j] != '\0' && name[j] != '\0')
+				j++;
+			if (name[j] == '\0')
+				return (sub_path);
+			i++;
 		}
 	}
 	return (NULL);
 }
 
 /**
- * _strchr - fing string in string
+ * _get_location - get location
  *
- * @s: pointer
- * @c: char
+ * @name: name
  *
- * Return: ponter
-*/
+ * Return: string
+ */
 
-char *_strchr(char *s, char c)
+char *_get_location(char *name)
 {
-	while (*s != '\0')
-	{
-		if (*s == c)
-			return (s);
-		s++;
-	}
+	char *path = _getenv("PATH");
+	char *o_path = NULL;
+	char *p_path = _strdup(path);
+	char *buffer = allocator(256);
 
-	if (*s == c)
-		return (s);
+	if (check_path(name) == 1)
+	{
+		_memcpy(buffer, name, _strlen(name));
+		free(p_path);
+		return (buffer);
+	}
+	_strtok(p_path, "=");
+	o_path = _strtok(NULL, ":");
+	while (o_path)
+	{
+		_strcat_path(o_path, name, buffer);
+		if (check_path(buffer) == 1)
+		{
+			free(p_path);
+			return (buffer);
+		}
+		o_path = _strtok(NULL, ":");
+	}
+	free(p_path);
 	return (NULL);
+}
+
+
+/**
+ * _strlen -length of string
+ *
+ * @str: string
+ *
+ * Return: unsigned int
+ */
+
+size_t _strlen(const char *str)
+{
+	size_t i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
+/**
+ * _strcat_path - concat two strings
+ *
+ * @dest: destine
+ * @src: source
+ * @buffer: buffer
+ *
+ * Return: nothing
+ */
+
+void _strcat_path(const char *dest, const char *src, char *buffer)
+{
+	size_t d = _strlen(dest);
+	size_t i = 0;
+
+	_strcpy(buffer, dest);
+	buffer[d++] = '/';
+	while (src[i])
+	{
+		buffer[d] = src[i];
+		d++;
+		i++;
+	}
+	buffer[d] = '\0';
 }

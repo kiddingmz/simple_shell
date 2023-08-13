@@ -1,109 +1,57 @@
 #include "main.h"
 
 /**
- * _check_command - check the command
+ * _strtrim - remove space in a string
  *
- * @args: argumetns
+ * @str: string
  *
- * Return: int
+ * Return: string
+ *
  */
 
-int _check_command(char **args)
+char *_strtrim(char *str)
 {
-	if (!args[0])
-		return (0);
-	if (!_strcmp(args[0], "exit"))
-		exit_status(args);
-	else if (!_strcmp(args[0], "env"))
-		_env();
-	else if (!_strcmp(args[0], "setenv"))
-		_setenv(args);
-	else if (!_strcmp(args[0], "unsetenv"))
-		_unsetenv(args);
-	else if (!_strcmp(args[0], "cd"))
-		_cd(args);
-	else if (!_strcmp(args[0], "clear"))
-		_clear(args);
-	else
-		return (0);
-	return (1);
-}
+	size_t len = _strlen(str);
+	size_t start = 0, end = len - 1;
 
-/**
- * _cd - change the current directory
- *
- * @args: argumetns
- *
- * Return: nothing
- */
-
-void _cd(char **args)
-{
-	char *dir = args[1];
-
-	if (dir == NULL)
+	if (str == NULL)
+		return (NULL);
+	while (end > 0 && _isspace(str[end]))
+		end--;
+	if (end == 0 && _isspace(str[end]))
+		return (NULL);
+	while (_isspace(str[start]))
+		start++;
+	if (start > 0)
 	{
-		dir = _getenv("HOME");
-		if (dir == NULL)
-		{
-			_putstring("cd: HOME not set\n");
-			return;
-		}
+		_memmove(str, str + start, len - start + 1);
+		len -= start;
 	}
-
-	if (chdir(dir) == -1)
-		perror("cd");
+	end = len - 1;
+	while (end > 0 && _isspace(str[end]))
+		end--;
+	str[end + 1] = '\0';
+	return (str);
 }
 
 /**
- * _clear - clear screnn of terminal
+ * _strncpy - copy a string
  *
- * @args: arguments
+ * @dest: destine
+ * @src: source
+ * @n: bytes
  *
- * Return: int
+ * Return: string
  */
 
-int _clear(char **args)
+char *_strncpy(char *dest, const char *src, size_t n)
 {
-	(void)args;
-	_putstring("\033[2J\033[H");
-	return (1);
+	size_t i;
+
+	for (i = 0; i < n && src[i] != '\0'; i++)
+		dest[i] = src[i];
+	for (; i < n; i++)
+		dest[i] = '\0';
+	return (dest);
 }
 
-/**
- * _env - Prints all the environment
- *
- * Return: nothing
- */
-
-int _env(void)
-{
-	int i;
-
-	for (i = 0; environ[i]; i++)
-	{
-		_putstring(environ[i]);
-		_putchar('\n');
-	}
-
-	return (0);
-}
-
-/**
- * exit_status - exit status
- *
- * @args: arguments
- *
- * Return: nothing
- */
-
-void exit_status(char **args)
-{
-	int status = 0;
-
-	if (args[1] != NULL)
-		status = _atoi(args[1]);
-	free_array(args);
-	free_last_input();
-	exit(status);
-}

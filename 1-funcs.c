@@ -92,7 +92,9 @@ char *_get_location(char *name)
 		o_path = _strtok(NULL, ":");
 	}
 	free(p_path);
-	return (NULL);
+	free(buffer);
+	buffer = NULL;
+	return (buffer);
 }
 
 

@@ -12,7 +12,7 @@
 
 void interactive(int ac, char **av, char **env)
 {
-	ssize_t num_buffer;
+	ssize_t num_buffer, line = 1;
 	size_t size_buffer;
 	char *command = NULL;
 	char *sub_command = NULL;
@@ -45,7 +45,7 @@ void interactive(int ac, char **av, char **env)
 				 _strtok(sub_command, " ");
 				data = process_args(command);
 				fflush(stdout);
-				_exe(ac, data, sub_command, av[0], env);
+				_exe(ac, data, sub_command, av[0], env, line++);
 				_free_array(data);
 				free(sub_command);
 			}
@@ -72,7 +72,7 @@ void non_interactive(int ac, char **av, char **env)
 	{
 		dat = _cpy_arg(av);
 		data = process_args(dat);
-		_exe(ac, data, av[1], av[0], env);
+		_exe(ac, data, av[1], av[0], env, 1);
 		free(dat);
 		_free_array(data);
 		dat = NULL;

@@ -55,3 +55,52 @@ char *_strncpy(char *dest, const char *src, size_t n)
 	return (dest);
 }
 
+/**
+ * _putcharerr - print a char
+ *
+ * @c: char
+ *
+ * Return: int
+ */
+
+int _putcharerr(char c)
+{
+	return (write(2, &c, 1));
+}
+
+/**
+ * _puterr - print string
+ *
+ * @str: string
+ *
+ * Return: lenght
+ */
+
+int _puterr(const char *str)
+{
+	unsigned int i;
+
+	for (i = 0; str[i] != '\0' && str != NULL; i++)
+		_putcharerr(str[i]);
+	return (i);
+}
+
+/**
+ * _flush_err - print error
+ *
+ * @file_name: file name
+ * @command: command
+ * @line: line
+ *
+ * Return: nothing
+ */
+
+void _flush_err(char *file_name, char *command, int line)
+{
+	_puterr(file_name);
+	_puterr(": ");
+	_putcharerr(line + '0');
+	_puterr(": ");
+	_puterr(command);
+	_puterr(": not found\n");
+}

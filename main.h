@@ -24,7 +24,7 @@ int check_path(char *);
 void non_interactive(int, char **, char **);
 void interactive(int, char **, char **);
 int _strcmp(const char *, const char *);
-void _exe(int, char **, char *, char *, char **);
+int _exe(int, char **, char *, char *, char **, int);
 void _free_array(char **);
 int _putchar(char);
 int _putstring(const char *);
@@ -45,4 +45,7 @@ int _isspace(int);
 char *_strtrim(char *);
 char *_memmove(char *, const char *, size_t);
 char *_memcpy(char *, const char *, size_t);
+int _putcharerr(char);
+int _puterr(const char *);
+void _flush_err(char *, char *, int);
 #endif

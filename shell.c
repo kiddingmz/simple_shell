@@ -1,6 +1,24 @@
 #include "main.h"
 
 /**
+ * mode - mode
+ *
+ * @ac: number of arguments
+ * @av: array
+ * @env: env
+ *
+ * Return: nothing
+ */
+
+void mode(int ac, char **av, char **env)
+{
+	if (ac == 1)
+		interactive(ac, av, env);
+	else
+		non_interactive(ac, av, env);
+}
+
+/**
  * main - entry point
  *
  * @ac: number of arguments
@@ -12,18 +30,13 @@
 
 int main(int ac, char **av, char **env)
 {
-	size_t i = 0;
+	size_t i = 0, line = 1, status = 0;
 	ssize_t nu;
 	char *buffer = NULL, *tmp_buffer = NULL, *sub_command = NULL;
 	char **data = NULL;
 
 	if (isatty(fileno(stdin)))
-	{
-		if (ac == 1)
-			interactive(ac, av, env);
-		else
-			non_interactive(ac, av, env);
-	}
+		mode(ac, av, env);
 	else
 	{
 		while ((nu = getline(&buffer, &i, stdin)) != EOF)
@@ -41,7 +54,9 @@ int main(int ac, char **av, char **env)
 					_strtok(sub_command, " ");
 					data = process_args(buffer);
 					fflush(stdout);
-					_exe(ac, data, sub_command, av[0], env);
+					status = _exe(ac, data,
+							sub_command, av[0],
+							env, line++);
 					_free_array(data);
 				}
 			}
@@ -49,6 +64,7 @@ int main(int ac, char **av, char **env)
 			free(data);
 		}
 		free(buffer);
+		exit(status);
 	}
 	return (0);
 }

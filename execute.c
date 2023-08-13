@@ -8,15 +8,17 @@
  * @c: command
  * @name: name file
  * @env: env
+ * @line: line execute
  *
- * Return: nothing
+ * Return: exit status
  */
 
-void _exe(__attribute__((unused)) int ac, char **av, char *c,
-		char *name, char **env)
+int _exe(__attribute__((unused)) int ac, char **av, char *c,
+		char *name, char **env, int line)
 {
 	char *path_file = NULL;
 	pid_t pid;
+	int status = 0;
 
 	if (c != NULL)
 	{
@@ -46,8 +48,9 @@ void _exe(__attribute__((unused)) int ac, char **av, char *c,
 		}
 		else
 		{
-			_putstring(c);
-			_putstring(": command not found\n");
+			_flush_err(name, c, line);
+			status = 127;
 		}
 	}
+	return (status);
 }

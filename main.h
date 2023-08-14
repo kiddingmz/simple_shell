@@ -21,14 +21,14 @@ size_t _strlen(const char *);
 /*char *_strcat_path(char *, char *);*/
 void _strcat_path(const char *, const char *, char *);
 int check_path(char *);
-void non_interactive(int, char **, char **);
-void interactive(int, char **, char **);
+void non_interactive(int, char **);
+void interactive(int, char **);
 int _strcmp(const char *, const char *);
-int _exe(int, char **, char *, char *, char **, int);
+int _exe(int, char **, char *, char *, int);
 void _free_array(char **);
 int _putchar(char);
 int _putstring(const char *);
-void _putenv(char **);
+void _putenv(void);
 char *_strdup(char *);
 char *_strtok(char *, const char *);
 char *_strcat(char *, char *);
@@ -48,4 +48,9 @@ char *_memcpy(char *, const char *, size_t);
 int _putcharerr(char);
 int _puterr(const char *);
 void _flush_err(char *, char *, int);
+int _setenv(char **args);
+int _unsetenv(char **args);
+void _cd(char **args);
+int exit_status(char **args);
+int _check_command(char **args);
 #endif

@@ -67,19 +67,16 @@ int _putstring(const char *str)
 /**
  * _putenv - print env
  *
- * @env: env
- *
  * Return: nothing
  */
 
-void _putenv(char **env)
+void _putenv(void)
 {
 	unsigned int i;
 
-	i = 0;
-	while (env[i])
+	for (i = 0; environ[i]; i++)
 	{
-		_putstring(env[i++]);
+		_putstring(environ[i]);
 		_putchar('\n');
 	}
 }

@@ -7,14 +7,13 @@
  * @av: array
  * @c: command
  * @name: name file
- * @env: env
  * @line: line execute
  *
  * Return: exit status
  */
 
 int _exe(__attribute__((unused)) int ac, char **av, char *c,
-		char *name, char **env, int line)
+		char *name, int line)
 {
 	char *path_file = NULL;
 	pid_t pid;
@@ -33,18 +32,17 @@ int _exe(__attribute__((unused)) int ac, char **av, char *c,
 			}
 			else if (pid == 0)
 			{
-				if (!_strcmp(c, "env"))
-					_putenv(env);
-				else
-					if (execve(path_file, av, environ) == -1)
-						perror(name);
+				if (execve(path_file, av, environ) == -1)
+					perror(name);
 			}
 			else
 			{
-				wait(NULL);
+				do {
+					waitpid(pid, &status, WUNTRACED);
+				} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 				free(path_file);
+				return (WEXITSTATUS(status));
 			}
-			c = NULL;
 		}
 		else
 		{

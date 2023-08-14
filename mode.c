@@ -5,12 +5,11 @@
  *
  * @ac: number of arguments
  * @av: array
- * @env: env
  *
  * Return: nothing
  */
 
-void interactive(int ac, char **av, char **env)
+void interactive(int ac, char **av)
 {
 	ssize_t num_buffer, line = 1;
 	size_t size_buffer;
@@ -45,7 +44,7 @@ void interactive(int ac, char **av, char **env)
 				 _strtok(sub_command, " ");
 				data = process_args(command);
 				fflush(stdout);
-				_exe(ac, data, sub_command, av[0], env, line++);
+				_exe(ac, data, sub_command, av[0], line++);
 				_free_array(data);
 				free(sub_command);
 			}
@@ -58,12 +57,11 @@ void interactive(int ac, char **av, char **env)
  *
  * @ac: number of arguments
  * @av: array
- * @env: env
  *
  * Return: nothing
  */
 
-void non_interactive(int ac, char **av, char **env)
+void non_interactive(int ac, char **av)
 {
 	char **data = NULL;
 	char *dat = NULL;
@@ -72,7 +70,7 @@ void non_interactive(int ac, char **av, char **env)
 	{
 		dat = _cpy_arg(av);
 		data = process_args(dat);
-		_exe(ac, data, av[1], av[0], env, 1);
+		_exe(ac, data, av[1], av[0], 1);
 		free(dat);
 		_free_array(data);
 		dat = NULL;
